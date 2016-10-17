@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ftpclient" default="all">
+  
+  
+  <property file="build.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/*.lib/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/.bundle/**"/>
+    <exclude name="**/*.rbc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.zip"/>
+    <include name="*.apk"/>
+    <include name="*.war"/>
+    <include name="*.egg"/>
+    <include name="*.ear"/>
+    <include name="*.ane"/>
+    <include name="*.swc"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+  </patternset>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module FTPClient -->
+  
+  <dirname property="module.ftpclient.basedir" file="${ant.file}"/>
+  
+  
+  
+  <property name="compiler.args.ftpclient" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="ftpclient.output.dir" value="${module.ftpclient.basedir}/out/production/FTPClient"/>
+  <property name="ftpclient.testoutput.dir" value="${module.ftpclient.basedir}/out/test/FTPClient"/>
+  
+  <path id="ftpclient.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="ftpclient.module.production.classpath"/>
+  
+  <path id="ftpclient.runtime.production.module.classpath">
+    <pathelement location="${ftpclient.output.dir}"/>
+  </path>
+  
+  <path id="ftpclient.module.classpath">
+    <pathelement location="${ftpclient.output.dir}"/>
+  </path>
+  
+  <path id="ftpclient.runtime.module.classpath">
+    <pathelement location="${ftpclient.testoutput.dir}"/>
+    <pathelement location="${ftpclient.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.ftpclient">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.ftpclient">
+    <patternset refid="excluded.from.module.ftpclient"/>
+  </patternset>
+  
+  <path id="ftpclient.module.sourcepath">
+    <dirset dir="${module.ftpclient.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.ftpclient" depends="compile.module.ftpclient.production,compile.module.ftpclient.tests" description="Compile module FTPClient"/>
+  
+  <target name="compile.module.ftpclient.production" description="Compile module FTPClient; production classes">
+    <mkdir dir="${ftpclient.output.dir}"/>
+    <javac destdir="${ftpclient.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
+      <compilerarg line="${compiler.args.ftpclient}"/>
+      <bootclasspath refid="ftpclient.module.bootclasspath"/>
+      <classpath refid="ftpclient.module.production.classpath"/>
+      <src refid="ftpclient.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ftpclient"/>
+    </javac>
+    
+    <copy todir="${ftpclient.output.dir}">
+      <fileset dir="${module.ftpclient.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.ftpclient.tests" depends="compile.module.ftpclient.production" description="compile module FTPClient; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.ftpclient" description="cleanup module">
+    <delete dir="${ftpclient.output.dir}"/>
+    <delete dir="${ftpclient.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.ftpclient" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.ftpclient" description="build all modules"/>
+  
+  <target name="all" depends="build.modules" description="build all"/>
+</project>
